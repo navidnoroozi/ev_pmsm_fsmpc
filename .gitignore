@@ -51,8 +51,6 @@ htmlcov/
 instance/
 *.sqlite3
 
-# Static plot outputs (generated dynamically)
-static/plots/*
-
-# But keep the directory itself
-!static/plots/.gitkeep
+# Plot outputs and performance metrics (generated dynamically)
+*.csv
+*.png
