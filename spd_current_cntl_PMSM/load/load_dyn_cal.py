@@ -84,5 +84,7 @@ class PMSMLoad:
         self.theta_e = math.fmod(self.theta_e, 2*math.pi)
         return (i_a_next, i_b_next, i_c_next), (i_d_next, i_q_next), T_e, self.omega_m
 
-    def get_theta_e(self): return self.theta_e
-    def get_omega_m(self): return self.omega_m
+    def get_theta_e(self): 
+        return self.theta_e
+    def get_omega_m(self): 
+        return self.omega_m

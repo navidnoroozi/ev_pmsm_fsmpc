@@ -78,15 +78,16 @@ def sim_executor(
                 # driver converts v_ref->omega_ref
                 omega_ref, _ = driver.step(v_ref, v_meas, vehicle)
                 
-            # ---- FOC: Speed PI -> (optional) MTPA -> dq refs -> αβ refs ----
-            load.T_L = vehicle.forces()[3]*vehicle.Rw/vehicle.G  # load torque
-            omega_meas = load.get_omega_m() # v_meas / vehicle.R_wheel * vehicle.G  # approximate motor speed from vehicle speed
-            i_q_cmd, _ = ang_speed_controller.compute_iq_ref(omega_ref, omega_meas)
+            
+            # load.T_L = vehicle.forces()[3]*vehicle.Rw/vehicle.G  # load torque
+            # omega_meas = load.get_omega_m() # v_meas / vehicle.Rw * vehicle.G  # approximate motor speed from vehicle speed
+            # ---- Vehicle Speed PI -> (optional) MTPA -> dq refs -> αβ refs ----
+            i_q_cmd = omega_ref
 
             if mtpa is not None:
                 i_d_ref, i_q_ref = mtpa.compute_from_iq(i_q_cmd)
             else:
-                i_d_ref, i_q_ref = 0.0, i_q_cmd
+                i_d_ref, i_q_ref = 0.0, i_q_cmd/vehicle.Rw
 
             theta_e = load.get_theta_e()
             i_alpha_ref, i_beta_ref = currentReference.set_dq_refs(i_d_ref, i_q_ref, theta_e)
@@ -137,8 +138,8 @@ def sim_executor(
         i_a_traj.append(i_a); i_b_traj.append(i_b); i_c_traj.append(i_c)
 
         ## Log PMSM trajectories (mechanical) ##
-        # omega_m = load.get_omega_m()
-        omega_ref_traj.append(omega_ref)
+        omega_m = load.get_omega_m()
+        omega_ref_traj.append(omega_ref/vehicle.Rw)
         omega_m_traj.append(float(omega_m))
         T_e_traj.append(float(T_e))
 

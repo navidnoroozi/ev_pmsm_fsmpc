@@ -30,7 +30,7 @@ L_s = 8.2e-3
 # --- simulation setup ---
 Ts_e = 30e-6      # electrical sample (inner loop)
 slower_by = 200  # run driver+speed controller every slow*Ts_e (6 ms)
-sim_time = 4000*Ts_e # 300.0  # seconds (matches sample cycle length)
+sim_time = 1e5*Ts_e # 300.0  # seconds (matches sample cycle length)
 
 def simPowertrainControlSyst(
     # --- voltage requests ---
